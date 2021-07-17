@@ -8,8 +8,10 @@ namespace NetLab
 
         static void Main(string[] args)
         {
-            Console.WriteLine("akucintakamu".MessageEncryption());
-            Console.WriteLine("maafAkuenggak".MessageEncryption());
+            //Console.WriteLine("akucintakamu".MessageEncryption());
+            //Console.WriteLine("maafAkuenggak".MessageEncryption());
+
+            NumberOrders.NumberOrder(5);
         }
 
     }
