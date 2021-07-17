@@ -8,10 +8,13 @@ namespace NetLab
 
         static void Main(string[] args)
         {
-            //Console.WriteLine("akucintakamu".MessageEncryption());
-            //Console.WriteLine("maafAkuenggak".MessageEncryption());
+            Console.WriteLine("===> Pesan Enkripsi <==");
+            Console.WriteLine("akucintakamu".MessageEncryption());
+            Console.WriteLine();
+            Console.WriteLine("maafAkuenggak".MessageEncryption());
 
-            NumberOrders.NumberOrder(5);
+            Console.WriteLine("\n\n ===> Susunan Angka Terjumlah Berdasarkan Input <==");
+            NumberOrders.NumberOrder(4);
         }
 
     }
