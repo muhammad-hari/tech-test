@@ -1,0 +1,106 @@
+﻿@model IndexViewModel
+
+
+@{ ViewBag.Title = "Repositories"; }
+
+
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="list-group">
+                    @foreach (var repository in Model.Repositories)
+                    {
+                        <a id="@repository.Name" href="javascript:void(0)" class="repository list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1 text-primary">@repository.Name</h5>
+                                <small class="text-muted text-monospace">@repository.CreatedAt.ToString("yyyy/MM/dd hh:mm:ss")</small>
+                            </div>
+                            <p class="mb-1">@repository.Description</p>
+                            <small class="text-muted text-monospace">@repository.CloneUrl.</small>
+                            <input id="repo-@repository.Name"  value="@repository.Name" type="hidden" />
+                            <input id="owner-@repository.Name" value="muhammad-hari" type="hidden" />
+                        </a>
+                      }
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                <label id="lblRepo" class="text-primary" style="font-size:18px">Repository</label>
+                <p id="navIssue"></p>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered" >
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col" width="450">Description</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col">Url</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="issue">
+                        <tr class="issue-content">
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+   
+    </div>
+</div>
+
+<script>
+    $(".repository").click(function () {
+        var id = $(this).attr('id');
+        var repoName = $('#repo-' + id).val();
+        //var repoOwner = $('#owner-' + id).val();
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetIssue",
+            data: { "repositoryName": repoName },
+            success: function (response) {
+                $(".issue-content").remove();
+                console.log('clear');
+
+                var count = 0;
+                $.each(response, function (index, value) {
+                    $(`<tr class="issue-content">
+                            <td><strong>${value.title}</strong></td>
+                            <td><p>${value.body}</p></td>
+                            <td>${value.createdAt}</td>
+                            <td><a href="${value.url}">Link</a> </td>
+                            <td>${value.state.stringValue}</td>
+                        </tr>`).insertAfter('#issue');
+                });
+
+                console.log(response);
+
+                $('#lblRepo').text(repoName);
+
+                $(".nav-issue-content").remove();
+                $(`<span class="nav-issue-content">Click <a href="/Home/IssueDetail?repositoryName=${repoName}">here</a> to view issue in another page</span>`).insertAfter('#navIssue');
+
+
+            },
+            failure: function (response) {
+                console.log(response.responseText);
+            },
+            error: function (response) {
+                console.log(response.responseText);
+            }
+        });
+    });
+</script>
